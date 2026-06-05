@@ -1,0 +1,23 @@
+/* 
+  Localizable.strings
+  TipsCalcu
+
+  Created by Сабит Бектуров on 05.06.2026.
+  
+*/
+
+"headline_title" = "Tip Calculator";
+"enter_total_bill" = "Enter total bill:";
+"who_is_paying" = "Who is paying?";
+"amount_of_people" = "Number of people:";
+"how_much_tip" = "How much tip?";
+"output_title" = "Output";
+"per_person_format" = "%.2f per person";
+"student_discount" = "Student discount applied 📚";
+"birthday_discount" = "Birthday discount applied 🎁";
+"vip_discount" = "VIP discount applied 😎";
+"guest_title" = "Guest";
+"student_title" = "Student";
+"birthday_title" = "Birthday";
+"person_title" = "people";
+"client_type" = "Client type";

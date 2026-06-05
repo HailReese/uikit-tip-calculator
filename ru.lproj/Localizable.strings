@@ -1,0 +1,23 @@
+/* 
+  Localizable.strings
+  TipsCalcu
+
+  Created by Сабит Бектуров on 05.06.2026.
+  
+*/
+
+"headline_title" = "Калькулятор чаевых";
+"enter_total_bill" = "Введите сумму чека:";
+"who_is_paying" = "Кто оплачивает счет?";
+"amount_of_people" = "Количество человек";
+"how_much_tip" = "Сколько оставить чаевых?";
+"output_title" = "Вывод";
+"per_person_format" = "%.2f с человека";
+"student_discount" = "Применена студенческая скидка 📚";
+"birthday_discount" = "Применена скидка именинника 🎁";
+"vip_discount" = "Применена VIP скидка 😎";
+"guest_title" = "Гость";
+"student_title" = "Студент";
+"birthday_title" = "Именинник";
+"person_title" = "человека";
+"client_type" = "Тип клиента";

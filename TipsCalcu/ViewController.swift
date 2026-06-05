@@ -9,12 +9,12 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    // MARK: Шаг 1: Объявление UI-элементов
+    // MARK: UI elements
 
     let headlineLbl: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 25.0, weight: .bold)
-        label.text = "Калькулятор чаевых"
+        label.text = NSLocalizedString("headline_title", comment: "")
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
 
@@ -23,7 +23,7 @@ class ViewController: UIViewController {
 
     let totalLbl: UILabel = {
         let label = UILabel()
-        label.text = "Введите сумму чека:"
+        label.text = NSLocalizedString("enter_total_bill", comment: "")
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -43,7 +43,7 @@ class ViewController: UIViewController {
 
     let clientTypeLbl: UILabel = {
         let label = UILabel()
-        label.text = "Кто оплачивает счет?"
+        label.text = NSLocalizedString("who_is_paying", comment: "")
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -52,7 +52,7 @@ class ViewController: UIViewController {
     let clientTypeButton: UIButton = {
         // Создаем кнопку с системным стилем (с закругленными краями, как на твоем скрине)
         var config = UIButton.Configuration.glass()
-        config.title = "Гость"  // Текст по умолчанию
+        config.title = NSLocalizedString("guest_title", comment: "")  // Текст по умолчанию
         config.baseBackgroundColor = .white
         config.baseForegroundColor = .black
         config.cornerStyle = .capsule  // Закругляем в овал, как на макете
@@ -68,7 +68,7 @@ class ViewController: UIViewController {
 
     let amountOfPplLbl: UILabel = {
         let label = UILabel()
-        label.text = "Количество человек:"
+        label.text = NSLocalizedString("amount_of_people", comment: "")
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -76,7 +76,7 @@ class ViewController: UIViewController {
 
     let amountOfPplButton: UIButton = {
         var config = UIButton.Configuration.glass()
-        config.title = "2 человека"
+        config.title = "2 \(NSLocalizedString("person_title", comment: ""))"
         config.baseBackgroundColor = .white
         config.baseForegroundColor = .black
         config.cornerStyle = .capsule
@@ -98,7 +98,7 @@ class ViewController: UIViewController {
 
     let tipsPercentageLbl: UILabel = {
         let label = UILabel()
-        label.text = "Сколько оставить чаевых?"
+        label.text = NSLocalizedString("how_much_tip", comment: "")
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -106,7 +106,7 @@ class ViewController: UIViewController {
 
     let outputLbl: UILabel = {
         let label = UILabel()
-        label.text = "Вывод"
+        label.text = NSLocalizedString("output_title", comment: "")
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -114,7 +114,7 @@ class ViewController: UIViewController {
 
     let outputLbl2: UILabel = {
         let label = UILabel()
-        label.text = "0.0 с человека"
+        label.text = ""
         label.font = .boldSystemFont(ofSize: 20)
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -140,9 +140,63 @@ class ViewController: UIViewController {
         setupKeyboardHiding()
         uiHandler()
     }
+    
+    // MARK: - Business Logic
+    private func calculateTips() {
+        guard let totalSum = totalTxtFld.text
+//                let currentClient = clientTypeButton.currentTitle,
+//                let amountOfPpl = amountOfPplButton.currentTitle
+        else { return }
+        
+        let currentClient = clientTypeButton.currentTitle ?? NSLocalizedString("guest_title", comment: "")
+        let amountOfPpl = amountOfPplButton.currentTitle ?? "2 \(NSLocalizedString("person_title", comment: ""))"
 
+        let total = Double(totalSum) ?? 0.0
+        let clientType: Double
+        
+        switch currentClient {
+        case NSLocalizedString("student_title", comment: ""):
+            clientType = 0.95
+            outputLbl3.text = NSLocalizedString("student_discount", comment: "")
+            outputLbl3.textColor = .blue
+        case NSLocalizedString("birthday_title", comment: ""):
+            clientType = 0.90
+            outputLbl3.text = NSLocalizedString("birthday_discount", comment: "")
+            outputLbl3.textColor = .green
+        case "VIP":
+            clientType = 0.85
+            outputLbl3.text = NSLocalizedString("vip_discount", comment: "")
+            outputLbl3.textColor = .yellow
+        default:
+            clientType = 1
+            outputLbl3.text = ""
+        }
+        let digits = amountOfPpl.filter { $0.isNumber }
+        
+        let amountInt = Double(digits)
+        
+        let tipPercentageInd = tipPicker.selectedSegmentIndex
+        var tipPercentage: Double = 0.0
+        
+        switch tipPercentageInd {
+        case 0: tipPercentage = 0.05
+        case 1: tipPercentage = 0.1
+        case 2: tipPercentage = 0.15
+        case 3: tipPercentage = 0.2
+        default: tipPercentage = 0
+        }
+        
+        let result = (total * clientType + total * clientType * tipPercentage) / (amountInt ?? 2)
+        
+        outputLbl2.text = String(format: NSLocalizedString("per_person_format", comment: ""), result)
+    }
+
+    
+}
+
+// MARK: - UI Setup & Layout
+extension ViewController {
     private func uiExecutor() {
-        // MARK: Шаг 2: Добавление на экран
         view.addSubview(headlineLbl)
         view.addSubview(totalLbl)
         view.addSubview(totalTxtFld)
@@ -156,7 +210,6 @@ class ViewController: UIViewController {
         view.addSubview(outputLbl2)
         view.addSubview(outputLbl3)
 
-        // MARK: Шаг 3: Расположение элементов на экране
 
         NSLayoutConstraint.activate([
             // Калькулятор чаевых
@@ -270,24 +323,27 @@ class ViewController: UIViewController {
 
         ])
     }
+}
 
+// MARK: - Actions & Menus
+extension ViewController {
     private func setupClientMenu() {
         // 1. Создаем элементы меню (UIAction)
         // handler — это замыкание, которое сработает, когда пользователь выберет этот пункт
-        let guestAction = UIAction(title: "Гость") { [weak self] _ in
-            self?.clientTypeButton.setTitle("Гость", for: .normal)
+        let guestAction = UIAction(title: NSLocalizedString("guest_title", comment: "")) { [weak self] _ in
+            self?.clientTypeButton.setTitle(NSLocalizedString("guest_title", comment: ""), for: .normal)
             self?.calculateTips()
             // Здесь твоя логика расчета для Гостя
         }
 
-        let studentAction = UIAction(title: "Студент") { [weak self] _ in
-            self?.clientTypeButton.setTitle("Студент", for: .normal)
+        let studentAction = UIAction(title: NSLocalizedString("student_title", comment: "")) { [weak self] _ in
+            self?.clientTypeButton.setTitle(NSLocalizedString("student_title", comment: ""), for: .normal)
             self?.calculateTips()
             // Здесь твоя логика расчета для Студента
         }
 
-        let birthdayAction = UIAction(title: "Именинник") { [weak self] _ in
-            self?.clientTypeButton.setTitle("Именинник", for: .normal)
+        let birthdayAction = UIAction(title: NSLocalizedString("birthday_title", comment: "")) { [weak self] _ in
+            self?.clientTypeButton.setTitle(NSLocalizedString("birthday_title", comment: ""), for: .normal)
             self?.calculateTips()
             // Здесь твоя логика расчета для Именинника
         }
@@ -300,7 +356,7 @@ class ViewController: UIViewController {
 
         // 2. Собираем элементы в одно UIMenu
         let menu = UIMenu(
-            title: "Тип клиента",
+            title: NSLocalizedString("client_type", comment: ""),
             children: [guestAction, studentAction, birthdayAction, vipAction]
         )
 
@@ -314,9 +370,9 @@ class ViewController: UIViewController {
         var amountOfPeopleArray = [UIAction]()
         for i in stride(from: 2, to: 100, by: 1) {
             amountOfPeopleArray.append(
-                UIAction(title: "\(i) человека") { [weak self] _ in
+                UIAction(title: "\(i) \(NSLocalizedString("person_title", comment: ""))") { [weak self] _ in
                     self?.amountOfPplButton.setTitle(
-                        "\(i) человека",
+                        "\(i) \(NSLocalizedString("person_title", comment: ""))",
                         for: .normal
                         
                     )
@@ -327,7 +383,7 @@ class ViewController: UIViewController {
 
         // 2. Собираем элементы в одно UIMenu
         let menu = UIMenu(
-            title: "Количество человек",
+            title: NSLocalizedString("amount_of_people", comment: ""),
             children: amountOfPeopleArray
         )
 
@@ -349,54 +405,7 @@ class ViewController: UIViewController {
         view.endEditing(true)  // Закрывает клавиатуру на всей view
     }
 
-    private func calculateTips() {
-        guard let totalSum = totalTxtFld.text
-//                let currentClient = clientTypeButton.currentTitle,
-//                let amountOfPpl = amountOfPplButton.currentTitle
-        else { return }
-        
-        let currentClient = clientTypeButton.currentTitle ?? "Гость"
-        let amountOfPpl = amountOfPplButton.currentTitle ?? "2 человека"
-
-        let total = Double(totalSum) ?? 0.0
-        let clientType: Double
-        
-        switch currentClient {
-        case "Студент":
-            clientType = 0.95
-            outputLbl3.text = "Применена студенческая скидка 📚"
-            outputLbl3.textColor = .blue
-        case "Именинник":
-            clientType = 0.90
-            outputLbl3.text = "Применена скидка именинника 🎁"
-            outputLbl3.textColor = .green
-        case "VIP":
-            clientType = 0.85
-            outputLbl3.text = "Применена VIP скидка 😎"
-            outputLbl3.textColor = .yellow
-        default:
-            clientType = 1
-            outputLbl3.text = ""
-        }
-        let digits = amountOfPpl.filter { $0.isNumber }
-        
-        let amountInt = Double(digits)
-        
-        let tipPercentageInd = tipPicker.selectedSegmentIndex
-        var tipPercentage: Double = 0.0
-        
-        switch tipPercentageInd {
-        case 0: tipPercentage = 0.05
-        case 1: tipPercentage = 0.1
-        case 2: tipPercentage = 0.15
-        case 3: tipPercentage = 0.2
-        default: tipPercentage = 0
-        }
-        
-        let result = (total * clientType + total * clientType * tipPercentage) / (amountInt ?? 2)
-        
-        outputLbl2.text = String(format: "%.2f с человека", result)
-    }
+    
     
     private func uiHandler() {
         // Для текстового поля — ловим изменение текста
