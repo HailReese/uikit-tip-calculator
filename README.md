@@ -1,25 +1,26 @@
-# Tip Calculator (Калькулятор чаевых)
+# Tip Calculator
 
-Учебное iOS-приложение для расчета чаевых и разделения чека между друзьями. Проект создан в рамках изучения iOS-разработки и перехода к верстке интерфейса на UIKit.
+A lightweight iOS application designed to calculate tips and split bills effortlessly among friends. This project was built to practice programmatic UI layout using the UIKit framework and to reinforce core Swift concepts.
 
-## 🎯 Цели проекта
-- Закрепить базовые концепции языка Swift (Optionals, Enums).
-- Освоить основы построения UI на фреймворке UIKit.
-- Реализовать логику подсчета с динамическим обновлением данных.
+## 🎯 Project Objectives
+- Transition from SwiftUI to programmatic **UIKit** development.
+- Master the `UIViewController` lifecycle and UI layout logic.
+- Practice clean code architecture and data flow.
+- Gain hands-on experience with Swift fundamentals (Optionals, Enums, and Access Modifiers).
 
-## 🛠 Технологии и особенности
-- **Язык:** Swift 5
-- **Фреймворк:** UIKit
-- **Архитектура:** MVC (или написать "Программная верстка (без Storyboard)", если верстал кодом)
-- **Интерфейс:** Поддержка светлой и темной тем, адаптивная верстка.
+## 🛠 Tech Stack & Features
+- **Language:** Swift 5
+- **Framework:** UIKit
+- **UI Approach:** 100% Programmatic UI (No Storyboards / Interface Builder)
+- **Features:** Adaptive layout, support for Dark/Light modes, clean input validation.
 
-## 📱 Функционал
-- Ввод суммы чека.
-- Выбор процента чаевых (через Segmented Control или слайдер).
-- Выбор количества человек для разделения счета.
-- Мгновенный расчет общей суммы и суммы на каждого человека.
+## 📱 Functionality
+- Intuitive bill amount input.
+- Quick tip percentage selection via Segmented Control.
+- Split-bill selector to divide the final amount among a dynamic number of people.
+- Instant, real-time calculation of the total bill and individual shares.
 
-## 📸 Скриншоты
-*(Здесь позже можно будет прикрепить скриншот экрана из симулятора)*
+## 📸 Screenshots
+*(Feel free to add your simulator screenshots here later)*
 ---
-*Проект выполнен в образовательных целях.*
+*This is an educational project created for learning purposes.*
