@@ -378,10 +378,9 @@ class ViewController: UIViewController {
             clientType = 1
             outputLbl3.text = ""
         }
-        var amountStr = amountOfPpl
-        amountStr.removeLast(9)
+        let digits = amountOfPpl.filter { $0.isNumber }
         
-        let amountInt = Double(amountStr)
+        let amountInt = Double(digits)
         
         let tipPercentageInd = tipPicker.selectedSegmentIndex
         var tipPercentage: Double = 0.0
