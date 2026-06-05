@@ -133,7 +133,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         uiExecutor()
         setupClientMenu()
         setupAmountMenu()
@@ -158,15 +158,15 @@ class ViewController: UIViewController {
         case NSLocalizedString("student_title", comment: ""):
             clientType = 0.95
             outputLbl3.text = NSLocalizedString("student_discount", comment: "")
-            outputLbl3.textColor = .blue
+            outputLbl3.textColor = .systemBlue
         case NSLocalizedString("birthday_title", comment: ""):
             clientType = 0.90
             outputLbl3.text = NSLocalizedString("birthday_discount", comment: "")
-            outputLbl3.textColor = .green
+            outputLbl3.textColor = .systemGreen
         case "VIP":
             clientType = 0.85
             outputLbl3.text = NSLocalizedString("vip_discount", comment: "")
-            outputLbl3.textColor = .yellow
+            outputLbl3.textColor = .systemOrange
         default:
             clientType = 1
             outputLbl3.text = ""
