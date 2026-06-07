@@ -22,5 +22,7 @@ A lightweight iOS application designed to calculate tips and split bills effortl
 
 ## 📸 Screenshots
 *(Feel free to add your simulator screenshots here later)*
----
+---<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-06-08 at 00 41 25" src="https://github.com/user-attachments/assets/a2770a69-bad4-4868-9a9b-d6f6adb30174" />
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-06-08 at 00 40 47" src="https://github.com/user-attachments/assets/de033080-e72b-4257-bdd6-7a521b0c8b7c" />
+
 *This is an educational project created for learning purposes.*
