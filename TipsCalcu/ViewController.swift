@@ -15,6 +15,7 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.font = .systemFont(ofSize: 25.0, weight: .bold)
         label.text = NSLocalizedString("headline_title", comment: "")
+        label.textColor = .label
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
 
@@ -24,6 +25,7 @@ class ViewController: UIViewController {
     let totalLbl: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("enter_total_bill", comment: "")
+        label.textColor = .label
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -34,9 +36,10 @@ class ViewController: UIViewController {
         txtField.placeholder = "0.0"
         txtField.textAlignment = .center
         txtField.keyboardType = .decimalPad
-        txtField.borderStyle = .roundedRect  // Provides a basic background style
-        txtField.layer.cornerRadius = 15  // Rounds the corners
-        txtField.clipsToBounds = true  // Clips the content to the corner radius boundaries
+        txtField.borderStyle = .none
+//        txtField.backgroundColor = .secondarySystemBackground
+//        txtField.layer.cornerRadius = 7  // Rounds the corners
+//        txtField.clipsToBounds = true  // Clips the content to the corner radius boundaries
         txtField.translatesAutoresizingMaskIntoConstraints = false
         return txtField
     }()
@@ -44,6 +47,7 @@ class ViewController: UIViewController {
     let clientTypeLbl: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("who_is_paying", comment: "")
+        label.textColor = .label
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -53,8 +57,8 @@ class ViewController: UIViewController {
         // Create a button with a system style (rounded edges as in your screenshot)
         var config = UIButton.Configuration.glass()
         config.title = NSLocalizedString("guest_title", comment: "")  // Default text
-        config.baseBackgroundColor = .white
-        config.baseForegroundColor = .black
+        config.baseBackgroundColor = .secondarySystemBackground
+        config.baseForegroundColor = .label
         config.cornerStyle = .capsule  // Round into an oval shape matching the layout
 
         let button = UIButton(configuration: config)
@@ -69,6 +73,7 @@ class ViewController: UIViewController {
     let amountOfPplLbl: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("amount_of_people", comment: "")
+        label.textColor = .label
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -77,8 +82,8 @@ class ViewController: UIViewController {
     let amountOfPplButton: UIButton = {
         var config = UIButton.Configuration.glass()
         config.title = "2 \(NSLocalizedString("person_title", comment: ""))"
-        config.baseBackgroundColor = .white
-        config.baseForegroundColor = .black
+        config.baseBackgroundColor = .secondarySystemBackground
+        config.baseForegroundColor = .label
         config.cornerStyle = .capsule
 
         let button = UIButton(configuration: config)
@@ -99,6 +104,7 @@ class ViewController: UIViewController {
     let tipsPercentageLbl: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("how_much_tip", comment: "")
+        label.textColor = .label
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -107,6 +113,7 @@ class ViewController: UIViewController {
     let outputLbl: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("output_title", comment: "")
+        label.textColor = .label
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -116,6 +123,7 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.text = ""
         label.font = .boldSystemFont(ofSize: 20)
+        label.textColor = .label
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -125,6 +133,7 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.text = ""
         label.font = .boldSystemFont(ofSize: 16)
+        label.textColor = .label
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
