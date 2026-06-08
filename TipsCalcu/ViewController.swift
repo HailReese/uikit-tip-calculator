@@ -34,9 +34,9 @@ class ViewController: UIViewController {
         txtField.placeholder = "0.0"
         txtField.textAlignment = .center
         txtField.keyboardType = .decimalPad
-        txtField.borderStyle = .roundedRect  // Дает базовую подложку
-        txtField.layer.cornerRadius = 15  // Скругляет углы
-        txtField.clipsToBounds = true  // Обрезает контент по радиусу
+        txtField.borderStyle = .roundedRect  // Provides a basic background style
+        txtField.layer.cornerRadius = 15  // Rounds the corners
+        txtField.clipsToBounds = true  // Clips the content to the corner radius boundaries
         txtField.translatesAutoresizingMaskIntoConstraints = false
         return txtField
     }()
@@ -50,16 +50,16 @@ class ViewController: UIViewController {
     }()
 
     let clientTypeButton: UIButton = {
-        // Создаем кнопку с системным стилем (с закругленными краями, как на твоем скрине)
+        // Create a button with a system style (rounded edges as in your screenshot)
         var config = UIButton.Configuration.glass()
-        config.title = NSLocalizedString("guest_title", comment: "")  // Текст по умолчанию
+        config.title = NSLocalizedString("guest_title", comment: "")  // Default text
         config.baseBackgroundColor = .white
         config.baseForegroundColor = .black
-        config.cornerStyle = .capsule  // Закругляем в овал, как на макете
+        config.cornerStyle = .capsule  // Round into an oval shape matching the layout
 
         let button = UIButton(configuration: config)
 
-        // КРИТИЧЕСКИ ВАЖНО: заставляем кнопку сразу открывать меню
+        // CRITICAL: Forces the button to open the menu immediately on tap
         button.showsMenuAsPrimaryAction = true
 
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -212,7 +212,7 @@ extension ViewController {
 
 
         NSLayoutConstraint.activate([
-            // Калькулятор чаевых
+            // Tip Calculator Headline
             headlineLbl.leftAnchor.constraint(
                 equalTo: view.leftAnchor,
                 constant: 20
@@ -222,7 +222,7 @@ extension ViewController {
                 constant: 80
             ),
 
-            // Сумма чека
+            // Total Bill Amount
             totalLbl.leftAnchor.constraint(
                 equalTo: view.leftAnchor,
                 constant: 20
@@ -240,7 +240,7 @@ extension ViewController {
                 equalTo: totalLbl.centerYAnchor
             ),
 
-            // Тип клиента
+            // Client Type
             clientTypeLbl.leftAnchor.constraint(
                 equalTo: view.leftAnchor,
                 constant: 20
@@ -258,7 +258,7 @@ extension ViewController {
                 equalTo: clientTypeLbl.centerYAnchor
             ),
 
-            // Процент чаевых
+            // Tip Percentage
             tipsPercentageLbl.leftAnchor.constraint(
                 equalTo: view.leftAnchor,
                 constant: 20
@@ -275,7 +275,7 @@ extension ViewController {
             ),
             tipPicker.widthAnchor.constraint(equalToConstant: 300),
 
-            // Количество человек
+            // Number of People
             amountOfPplLbl.leftAnchor.constraint(
                 equalTo: view.leftAnchor,
                 constant: 20
@@ -293,7 +293,7 @@ extension ViewController {
                 equalTo: amountOfPplLbl.centerYAnchor
             ),
 
-            // Вывод
+            // Output Sections
             outputLbl.leftAnchor.constraint(
                 equalTo: view.leftAnchor,
                 constant: 20
@@ -328,45 +328,45 @@ extension ViewController {
 // MARK: - Actions & Menus
 extension ViewController {
     private func setupClientMenu() {
-        // 1. Создаем элементы меню (UIAction)
-        // handler — это замыкание, которое сработает, когда пользователь выберет этот пункт
+        // 1. Create menu actions (UIAction)
+        // handler is a closure that triggers when the user selects this menu option
         let guestAction = UIAction(title: NSLocalizedString("guest_title", comment: "")) { [weak self] _ in
             self?.clientTypeButton.setTitle(NSLocalizedString("guest_title", comment: ""), for: .normal)
             self?.calculateTips()
-            // Здесь твоя логика расчета для Гостя
+            // Business logic for Guest goes here
         }
 
         let studentAction = UIAction(title: NSLocalizedString("student_title", comment: "")) { [weak self] _ in
             self?.clientTypeButton.setTitle(NSLocalizedString("student_title", comment: ""), for: .normal)
             self?.calculateTips()
-            // Здесь твоя логика расчета для Студента
+            // Business logic for Student goes here
         }
 
         let birthdayAction = UIAction(title: NSLocalizedString("birthday_title", comment: "")) { [weak self] _ in
             self?.clientTypeButton.setTitle(NSLocalizedString("birthday_title", comment: ""), for: .normal)
             self?.calculateTips()
-            // Здесь твоя логика расчета для Именинника
+            // Business logic for Birthday Person goes here
         }
 
         let vipAction = UIAction(title: "VIP") { [weak self] _ in
             self?.clientTypeButton.setTitle("VIP", for: .normal)
             self?.calculateTips()
-            // Здесь твоя логика расчета для VIP
+            // Business logic for VIP goes here
         }
 
-        // 2. Собираем элементы в одно UIMenu
+        // 2. Assemble elements into a single UIMenu
         let menu = UIMenu(
             title: NSLocalizedString("client_type", comment: ""),
             children: [guestAction, studentAction, birthdayAction, vipAction]
         )
 
-        // 3. Отдаем это меню нашей кнопке
+        // 3. Assign the configured menu to our button
         clientTypeButton.menu = menu
     }
 
     private func setupAmountMenu() {
-        // 1. Создаем элементы меню (UIAction)
-        // handler — это замыкание, которое сработает, когда пользователь выберет этот пункт
+        // 1. Create menu actions (UIAction)
+        // handler is a closure that triggers when the user selects this menu option
         var amountOfPeopleArray = [UIAction]()
         for i in stride(from: 2, to: 100, by: 1) {
             amountOfPeopleArray.append(
@@ -381,13 +381,13 @@ extension ViewController {
             )
         }
 
-        // 2. Собираем элементы в одно UIMenu
+        // 2. Assemble elements into a single UIMenu
         let menu = UIMenu(
             title: NSLocalizedString("amount_of_people", comment: ""),
             children: amountOfPeopleArray
         )
 
-        // 3. Отдаем это меню нашей кнопке
+        // 3. Assign the configured menu to our button
         amountOfPplButton.menu = menu
     }
 
@@ -396,22 +396,22 @@ extension ViewController {
             target: self,
             action: #selector(dismissKeyboard)
         )
-        // Отменяет задержку нажатий на другие элементы (кнопки не будут тупить при первом тапе)
+        // Prevents touch delays on other components (buttons won't hang on the first tap)
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
     }
 
     @objc private func dismissKeyboard() {
-        view.endEditing(true)  // Закрывает клавиатуру на всей view
+        view.endEditing(true)  // Closes the keyboard across the entire view hierarchy
     }
 
     
     
     private func uiHandler() {
-        // Для текстового поля — ловим изменение текста
+        // For text field — tracks changes to input text
         totalTxtFld.addTarget(self, action: #selector(someInfoChanged), for: .editingChanged)
         
-        // Для сегмента — ловим изменение выбранного значения
+        // For segmented control — tracks changes to the selected index value
         tipPicker.addTarget(self, action: #selector(someInfoChanged), for: .valueChanged)
     }
     
