@@ -8,6 +8,8 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    private let calculatorService: TipCalculatorBusinessLogic = CalculatorService()
 
     // MARK: UI elements
 
@@ -166,21 +168,15 @@ class ViewController: UIViewController {
         let total = Double(totalSum) ?? 0.0
         
         let clientType = ClientType(title: currentClient) ?? ClientType.guest
-        let clientTypeMultiplier: Double
-        
-        
-        clientTypeMultiplier = clientType.discountMultiplier
         outputLbl3.text = clientType.discountDescription
         outputLbl3.textColor = clientType.statusColor
         
         let digits = amountOfPpl.filter { $0.isNumber }
+        let peopleCount = Int(digits)
         
-        let amountInt = Double(digits)
+        let tipPercentage = TipPercentage.allCases[tipPicker.selectedSegmentIndex]
         
-        let tipPercentageInd = tipPicker.selectedSegmentIndex
-        let tipPercentage: Double = TipPercentage.allCases[tipPercentageInd].tipMultiplier
-        
-        let result = (total * clientTypeMultiplier + total * tipPercentage) / (amountInt ?? 2)
+        let result = calculatorService.calculateTotal(bill: total, client: clientType, tip: tipPercentage, peopleCount: peopleCount ?? 2)
         
         outputLbl2.text = String(format: NSLocalizedString("per_person_format", comment: ""), result)
     }
