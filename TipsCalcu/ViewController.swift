@@ -32,14 +32,14 @@ class ViewController: UIViewController {
     }()
 
     let totalTxtFld: UITextField = {
-        let txtField = UITextField()
+        let txtField = PaddedTextField()
         txtField.placeholder = "0.0"
         txtField.textAlignment = .center
         txtField.keyboardType = .decimalPad
         txtField.borderStyle = .none
-//        txtField.backgroundColor = .secondarySystemBackground
-//        txtField.layer.cornerRadius = 7  // Rounds the corners
-//        txtField.clipsToBounds = true  // Clips the content to the corner radius boundaries
+        txtField.backgroundColor = .secondarySystemBackground
+        txtField.layer.cornerRadius = 10  // Rounds the corners
+        txtField.clipsToBounds = true  // Clips the content to the corner radius boundaries
         txtField.translatesAutoresizingMaskIntoConstraints = false
         return txtField
     }()
@@ -56,7 +56,7 @@ class ViewController: UIViewController {
     let clientTypeButton: UIButton = {
         // Create a button with a system style (rounded edges as in your screenshot)
         var config = UIButton.Configuration.glass()
-        config.title = NSLocalizedString("guest_title", comment: "")  // Default text
+        config.title = ClientType.guest.title  // Default text
         config.baseBackgroundColor = .secondarySystemBackground
         config.baseForegroundColor = .label
         config.cornerStyle = .capsule  // Round into an oval shape matching the layout
@@ -157,29 +157,19 @@ class ViewController: UIViewController {
 //                let amountOfPpl = amountOfPplButton.currentTitle
         else { return }
         
-        let currentClient = clientTypeButton.currentTitle ?? NSLocalizedString("guest_title", comment: "")
+        let currentClient = clientTypeButton.currentTitle ?? ClientType.guest.title
         let amountOfPpl = amountOfPplButton.currentTitle ?? "2 \(NSLocalizedString("person_title", comment: ""))"
 
         let total = Double(totalSum) ?? 0.0
-        let clientType: Double
         
-        switch currentClient {
-        case NSLocalizedString("student_title", comment: ""):
-            clientType = 0.95
-            outputLbl3.text = NSLocalizedString("student_discount", comment: "")
-            outputLbl3.textColor = .systemBlue
-        case NSLocalizedString("birthday_title", comment: ""):
-            clientType = 0.90
-            outputLbl3.text = NSLocalizedString("birthday_discount", comment: "")
-            outputLbl3.textColor = .systemGreen
-        case "VIP":
-            clientType = 0.85
-            outputLbl3.text = NSLocalizedString("vip_discount", comment: "")
-            outputLbl3.textColor = .systemOrange
-        default:
-            clientType = 1
-            outputLbl3.text = ""
-        }
+        let clientType = ClientType(title: currentClient) ?? ClientType.guest
+        let clientTypeMultiplier: Double
+        
+        
+        clientTypeMultiplier = clientType.discountMultiplier
+        outputLbl3.text = clientType.discountDescription
+        outputLbl3.textColor = clientType.statusColor
+        
         let digits = amountOfPpl.filter { $0.isNumber }
         
         let amountInt = Double(digits)
@@ -195,7 +185,7 @@ class ViewController: UIViewController {
         default: tipPercentage = 0
         }
         
-        let result = (total * clientType + total * clientType * tipPercentage) / (amountInt ?? 2)
+        let result = (total * clientTypeMultiplier + total * tipPercentage) / (amountInt ?? 2)
         
         outputLbl2.text = String(format: NSLocalizedString("per_person_format", comment: ""), result)
     }
@@ -248,6 +238,8 @@ extension ViewController {
             totalTxtFld.centerYAnchor.constraint(
                 equalTo: totalLbl.centerYAnchor
             ),
+//            totalTxtFld.heightAnchor.constraint(equalToConstant: 45),
+//            totalTxtFld.widthAnchor.constraint(equalToConstant: 120),
 
             // Client Type
             clientTypeLbl.leftAnchor.constraint(
@@ -339,34 +331,20 @@ extension ViewController {
     private func setupClientMenu() {
         // 1. Create menu actions (UIAction)
         // handler is a closure that triggers when the user selects this menu option
-        let guestAction = UIAction(title: NSLocalizedString("guest_title", comment: "")) { [weak self] _ in
-            self?.clientTypeButton.setTitle(NSLocalizedString("guest_title", comment: ""), for: .normal)
-            self?.calculateTips()
-            // Business logic for Guest goes here
-        }
-
-        let studentAction = UIAction(title: NSLocalizedString("student_title", comment: "")) { [weak self] _ in
-            self?.clientTypeButton.setTitle(NSLocalizedString("student_title", comment: ""), for: .normal)
-            self?.calculateTips()
-            // Business logic for Student goes here
-        }
-
-        let birthdayAction = UIAction(title: NSLocalizedString("birthday_title", comment: "")) { [weak self] _ in
-            self?.clientTypeButton.setTitle(NSLocalizedString("birthday_title", comment: ""), for: .normal)
-            self?.calculateTips()
-            // Business logic for Birthday Person goes here
-        }
-
-        let vipAction = UIAction(title: "VIP") { [weak self] _ in
-            self?.clientTypeButton.setTitle("VIP", for: .normal)
-            self?.calculateTips()
-            // Business logic for VIP goes here
+        
+        var clientActions: [UIAction] = []
+        
+        for i in stride(from: 0, to: ClientType.allCases.count, by: 1) {
+            clientActions.append(UIAction(title: ClientType.allCases[i].title) { [weak self] _ in
+                self?.clientTypeButton.setTitle(ClientType.allCases[i].title, for: .normal)
+                self?.calculateTips()
+            })
         }
 
         // 2. Assemble elements into a single UIMenu
         let menu = UIMenu(
             title: NSLocalizedString("client_type", comment: ""),
-            children: [guestAction, studentAction, birthdayAction, vipAction]
+            children: clientActions
         )
 
         // 3. Assign the configured menu to our button
@@ -426,5 +404,83 @@ extension ViewController {
     
     @objc private func someInfoChanged() {
         calculateTips()
+    }
+}
+
+class PaddedTextField: UITextField {
+    let padding = UIEdgeInsets(top: 2, left: 15, bottom: 2, right: 15)
+    
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: padding)
+    }
+    
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: padding)
+    }
+    
+    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: padding)
+    }
+}
+
+enum ClientType: CaseIterable {
+    case guest, student, birthday, VIP
+    
+    init?(title: String) {
+        guard let user = ClientType.allCases.first(where: {
+            $0.title == title }) else { return nil }
+        self = user
+    }
+    
+    var title: String {
+        switch self {
+        case .guest:
+            NSLocalizedString("guest_title", comment: "")
+        case .student:
+            NSLocalizedString("student_title", comment: "")
+        case .birthday:
+            NSLocalizedString("birthday_title", comment: "")
+        case .VIP:
+            "VIP"
+        }
+    }
+    
+    var discountMultiplier: Double {
+        switch self {
+        case .guest:
+            1.0
+        case .student:
+            0.95
+        case .birthday:
+            0.90
+        case .VIP:
+            0.85
+        }
+    }
+    
+    var discountDescription: String {
+        switch self {
+        case .guest:
+            ""
+        case .student:
+            NSLocalizedString("student_discount", comment: "")
+        case .birthday:
+            NSLocalizedString("birthday_discount", comment: "")
+        case .VIP:
+            NSLocalizedString("vip_discount", comment: "")
+        }
+    }
+    
+    var statusColor: UIColor {
+        switch self {
+        case .guest:
+                .label
+        case .student:
+                .systemBlue
+        case .birthday:
+                .systemGreen
+        case .VIP:
+                .systemOrange
+        }
     }
 }
