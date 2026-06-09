@@ -12,6 +12,16 @@ class ViewController: UIViewController {
     private let calculatorService: TipCalculatorBusinessLogic = CalculatorService()
 
     // MARK: UI elements
+    
+    let stackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.distribution = .fill
+        stack.alignment = .leading
+        stack.spacing = 10
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
 
     let headlineLbl: UILabel = {
         let label = UILabel()
@@ -180,13 +190,12 @@ class ViewController: UIViewController {
         
         outputLbl2.text = String(format: NSLocalizedString("per_person_format", comment: ""), result)
     }
-
-    
 }
 
 // MARK: - UI Setup & Layout
 extension ViewController {
     private func uiExecutor() {
+        view.addSubview(stackView)
         view.addSubview(headlineLbl)
         view.addSubview(totalLbl)
         view.addSubview(totalTxtFld)
@@ -196,10 +205,13 @@ extension ViewController {
         view.addSubview(amountOfPplButton)
         view.addSubview(tipsPercentageLbl)
         view.addSubview(tipPicker)
-        view.addSubview(outputLbl)
-        view.addSubview(outputLbl2)
-        view.addSubview(outputLbl3)
+//        view.addSubview(outputLbl)
+//        view.addSubview(outputLbl2)
+//        view.addSubview(outputLbl3)
 
+        stackView.addArrangedSubview(outputLbl)
+        stackView.addArrangedSubview(outputLbl2)
+        stackView.addArrangedSubview(outputLbl3)
 
         NSLayoutConstraint.activate([
             // Tip Calculator Headline
@@ -286,32 +298,32 @@ extension ViewController {
             ),
 
             // Output Sections
-            outputLbl.leftAnchor.constraint(
+            stackView.leftAnchor.constraint(
                 equalTo: view.leftAnchor,
                 constant: 20
             ),
-            outputLbl.topAnchor.constraint(
+            stackView.topAnchor.constraint(
                 equalTo: amountOfPplLbl.bottomAnchor,
                 constant: 30
             ),
 
-            outputLbl2.leftAnchor.constraint(
-                equalTo: view.leftAnchor,
-                constant: 20
-            ),
-            outputLbl2.topAnchor.constraint(
-                equalTo: outputLbl.bottomAnchor,
-                constant: 30
-            ),
-
-            outputLbl3.leftAnchor.constraint(
-                equalTo: view.leftAnchor,
-                constant: 20
-            ),
-            outputLbl3.topAnchor.constraint(
-                equalTo: outputLbl2.bottomAnchor,
-                constant: 30
-            ),
+//            outputLbl2.leftAnchor.constraint(
+//                equalTo: view.leftAnchor,
+//                constant: 20
+//            ),
+//            outputLbl2.topAnchor.constraint(
+//                equalTo: outputLbl.bottomAnchor,
+//                constant: 30
+//            ),
+//
+//            outputLbl3.leftAnchor.constraint(
+//                equalTo: view.leftAnchor,
+//                constant: 20
+//            ),
+//            outputLbl3.topAnchor.constraint(
+//                equalTo: outputLbl2.bottomAnchor,
+//                constant: 30
+//            ),
 
         ])
     }
