@@ -93,9 +93,12 @@ class ViewController: UIViewController {
     }()
 
     let tipPicker: UISegmentedControl = {
-        let uiSegmentedControl = UISegmentedControl(items: [
-            "5%", "10%", "15%", "20%",
-        ])
+        let tipPercArrTitle = TipPercentage.allCases.map({ $0.title })
+//        var tipPercArrTitle = [String]()
+//        for i in stride(from: 0, to: TipPercentage.allCases.count, by: 1) {
+//            tipPercArrTitle.append(TipPercentage.allCases[i].title)
+//        }
+        let uiSegmentedControl = UISegmentedControl(items: tipPercArrTitle)
         uiSegmentedControl.selectedSegmentIndex = 2
         uiSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
         return uiSegmentedControl
@@ -175,15 +178,7 @@ class ViewController: UIViewController {
         let amountInt = Double(digits)
         
         let tipPercentageInd = tipPicker.selectedSegmentIndex
-        var tipPercentage: Double = 0.0
-        
-        switch tipPercentageInd {
-        case 0: tipPercentage = 0.05
-        case 1: tipPercentage = 0.1
-        case 2: tipPercentage = 0.15
-        case 3: tipPercentage = 0.2
-        default: tipPercentage = 0
-        }
+        let tipPercentage: Double = TipPercentage.allCases[tipPercentageInd].tipMultiplier
         
         let result = (total * clientTypeMultiplier + total * tipPercentage) / (amountInt ?? 2)
         
@@ -361,7 +356,6 @@ extension ViewController {
                     self?.amountOfPplButton.setTitle(
                         "\(i) \(NSLocalizedString("person_title", comment: ""))",
                         for: .normal
-                        
                     )
                     self?.calculateTips()
                 }
@@ -482,5 +476,26 @@ enum ClientType: CaseIterable {
         case .VIP:
                 .systemOrange
         }
+    }
+}
+
+enum TipPercentage: CaseIterable {
+    case low, medium, high, extra
+    
+    var tipMultiplier: Double {
+        switch self {
+        case .low:
+            0.05
+        case .medium:
+            0.10
+        case .high:
+            0.15
+        case .extra:
+            0.20
+        }
+    }
+    
+    var title: String {
+        "\(Int(tipMultiplier * 100))%"
     }
 }
